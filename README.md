@@ -1,4 +1,4 @@
-# Velira
+# Latch
 
 GxP-aware cloud configuration drift detection for biotech companies.
 
