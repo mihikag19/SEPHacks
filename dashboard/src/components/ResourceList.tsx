@@ -1,7 +1,10 @@
-import type { Resource } from "../types";
+import type { Resource, StatusResponse, DriftEvent } from "../types";
+import AuditExport from "./AuditExport";
 
 interface Props {
   resources: Resource[];
+  status: StatusResponse;
+  events: DriftEvent[];
 }
 
 const typeIcons: Record<string, string> = {
@@ -11,7 +14,7 @@ const typeIcons: Record<string, string> = {
   virtualMachines: "VM",
 };
 
-export default function ResourceList({ resources }: Props) {
+export default function ResourceList({ resources, status, events }: Props) {
   return (
     <div className="resource-list panel">
       <div className="panel-header">
@@ -44,6 +47,7 @@ export default function ResourceList({ resources }: Props) {
           </div>
         ))}
       </div>
+      <AuditExport status={status} events={events} />
     </div>
   );
 }

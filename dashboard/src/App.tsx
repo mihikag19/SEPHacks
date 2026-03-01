@@ -39,7 +39,7 @@ export default function App() {
       <StatusSummary status={status} />
 
       <div className="main-panels">
-        <ResourceList resources={status.resources} />
+        <ResourceList resources={status.resources} status={status} events={events.events} />
         <EventFeed events={events.events} />
       </div>
 

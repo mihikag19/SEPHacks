@@ -462,6 +462,49 @@ body {
 
 .drift-clean { font-size: 11px; color: var(--green); opacity: 0.6; }
 
+/* ── Audit Export ────────────────────────────────────────────── */
+
+.audit-export {
+  display: flex;
+  gap: 6px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.audit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.audit-btn:hover {
+  color: var(--text-secondary);
+  border-color: var(--border-light);
+  background: var(--bg-card);
+}
+
+.audit-btn:active {
+  background: var(--bg-elevated);
+}
+
+.audit-btn svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.audit-btn:hover svg { opacity: 1; }
+
 /* ── Event Feed ──────────────────────────────────────────────── */
 
 .event-list {
