@@ -38,7 +38,7 @@ export default function WelcomePage() {
           letterSpacing: '-0.03em',
           margin: 0,
         }}>
-          Velira
+          Latch
         </h1>
 
         {/* Tagline */}

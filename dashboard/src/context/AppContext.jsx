@@ -21,7 +21,7 @@ const MOCK_EVENTS = [
     regulation_reference: "21 CFR Part 11.10(a)",
     remediation_suggestion: 'resource "azurerm_storage_account" "genomics" {\n  name = "genomicsdatastorageprod"\n}',
     gxp_impact: "Storage account is no longer validated for regulated clinical data. FDA submission risk.",
-    pr: { pr_url: "https://github.com/velira-demo/infra/pull/42", pr_real: false },
+    pr: { pr_url: "https://github.com/latch-demo/infra/pull/42", pr_real: false },
     timestamp: "2025-03-01T00:00:05Z",
     status: "open"
   }

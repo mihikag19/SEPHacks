@@ -29,7 +29,7 @@ export default function AuditTrail() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `velira-audit-trail-${new Date().toISOString()}.json`
+    a.download = `latch-audit-trail-${new Date().toISOString()}.json`
     a.click()
     URL.revokeObjectURL(url)
   }

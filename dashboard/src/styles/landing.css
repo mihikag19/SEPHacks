@@ -1,0 +1,124 @@
+/* ── Landing Page Styles ──────────────────────── */
+
+/* ── Scroll-snap Container ───────────────────── */
+.landing-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.landing-container.snap-disabled {
+  scroll-snap-type: none;
+}
+
+.landing-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+/* ── Sidebar Override (hide during landing) ──── */
+.landing-container aside {
+  transform: translateX(-240px) !important;
+  opacity: 0 !important;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
+.landing-container.dashboard-in-view aside {
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+}
+
+/* ── Hero Entrance Keyframes ─────────────────── */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scrollBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+
+.hero-label,
+.hero-title,
+.hero-subtitle,
+.hero-cta {
+  opacity: 0;
+  animation: heroFadeUp 0.8s ease-out forwards;
+}
+
+.hero-label    { animation-delay: 0.2s; }
+.hero-title    { animation-delay: 0.4s; }
+.hero-subtitle { animation-delay: 0.6s; }
+.hero-cta      { animation-delay: 0.8s; }
+
+.hero-scroll-indicator {
+  opacity: 0;
+  animation: heroFadeIn 0.8s ease-out 1.2s forwards;
+}
+
+.hero-scroll-indicator svg {
+  animation: scrollBob 2.5s ease-in-out infinite;
+}
+
+/* ── Section Entrance (IntersectionObserver) ─── */
+.landing-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.in-view .landing-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.in-view .landing-animate:nth-child(1) { transition-delay: 0s; }
+.in-view .landing-animate:nth-child(2) { transition-delay: 0.12s; }
+.in-view .landing-animate:nth-child(3) { transition-delay: 0.24s; }
+.in-view .landing-animate:nth-child(4) { transition-delay: 0.36s; }
+.in-view .landing-animate:nth-child(5) { transition-delay: 0.48s; }
+.in-view .landing-animate:nth-child(6) { transition-delay: 0.6s; }
+
+/* ── Responsive (<768px) ─────────────────────── */
+@media (max-width: 768px) {
+  .landing-container {
+    scroll-snap-type: none;
+  }
+
+  .landing-section {
+    min-height: auto;
+    padding: 60px 20px;
+  }
+
+  .landing-cards-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .landing-cards-row > * {
+    width: 100% !important;
+    max-width: 340px;
+  }
+
+  .hero-title {
+    font-size: 36px !important;
+  }
+
+  .landing-heading {
+    font-size: 28px !important;
+  }
+}

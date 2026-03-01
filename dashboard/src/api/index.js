@@ -19,10 +19,3 @@ export async function getEvents(){
   return await safeFetch('/api/events')
 }
 
-export async function triggerDrift(scenario){
-  return await safeFetch('/api/trigger-drift', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ scenario })
-  })
-}

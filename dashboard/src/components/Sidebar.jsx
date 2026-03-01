@@ -23,7 +23,7 @@ function NavSection({ label, items }) {
         letterSpacing: '0.1em',
         color: 'var(--text-muted)',
         textTransform: 'uppercase',
-        padding: '0 24px',
+        paddingLeft: 24,
         marginBottom: 8,
       }}>
         {label}
@@ -37,7 +37,6 @@ function NavSection({ label, items }) {
             style={{
               height: 40,
               padding: '0 24px',
-              paddingLeft: 22,
               display: 'flex',
               alignItems: 'center',
               gap: 12,
@@ -45,15 +44,13 @@ function NavSection({ label, items }) {
               fontSize: 13,
               fontWeight: 500,
               borderRadius: 0,
-              ...(item.active ? {
-                color: '#FFFFFF',
-                background: 'rgba(152, 193, 217, 0.08)',
-                borderLeft: '2px solid var(--accent-primary)',
-              } : {
-                color: 'var(--text-muted)',
-                background: 'transparent',
-                borderLeft: '2px solid transparent',
-              }),
+              borderLeft: item.active
+                ? '2px solid var(--accent-primary)'
+                : '2px solid transparent',
+              color: item.active ? '#FFFFFF' : 'var(--text-muted)',
+              background: item.active
+                ? 'rgba(152, 193, 217, 0.08)'
+                : 'transparent',
             }}
             onMouseEnter={e => {
               if (!item.active) {
@@ -102,7 +99,7 @@ export default function Sidebar() {
           color: '#FFFFFF',
           letterSpacing: '-0.03em',
         }}>
-          Velira
+          Latch
         </span>
       </div>
 
@@ -136,8 +133,8 @@ export default function Sidebar() {
           VA
         </div>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 500, color: '#FFFFFF' }}>Velira Admin</div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Administrator</div>
+          <div style={{ fontSize: 13, fontWeight: 500, color: '#FFFFFF' }}>Latch Admin</div>
+          <div style={{ fontSize: 11, fontWeight: 300, color: 'var(--text-muted)' }}>Administrator</div>
         </div>
       </div>
     </aside>
