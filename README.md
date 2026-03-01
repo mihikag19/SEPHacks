@@ -1,4 +1,4 @@
-# Drift Sentinel
+# Velira
 
 GxP-aware cloud configuration drift detection for biotech companies.
 
