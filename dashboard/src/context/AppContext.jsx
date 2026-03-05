@@ -4,9 +4,12 @@ import {
   fetchEvents,
   fetchAuditTrail,
   triggerDrift as apiTriggerDrift,
+  setApiBase,
+  getApiBase,
 } from '../api'
 
 const POLL_INTERVAL = 3000
+const LIVE_URL = 'https://latch.onrender.com'
 
 const MOCK_STATUS = {
   state: 'compliant',
@@ -46,6 +49,9 @@ export function AppProvider({ children }) {
 
   // ── Offline flag ──
   const [offline, setOffline] = useState(false)
+
+  // ── Connection state for Go Live ──
+  const [connectionState, setConnectionState] = useState('disconnected') // 'disconnected' | 'connecting' | 'connected'
 
   // ── Loaders ──
   const loadStatus = useCallback(async () => {
@@ -92,6 +98,36 @@ export function AppProvider({ children }) {
       setAuditLoading(false)
     }
   }, [])
+
+  // ── Go Live ──
+  const goLive = useCallback(async () => {
+    setConnectionState('connecting')
+    setApiBase(LIVE_URL)
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 60000)
+      const res = await fetch(`${LIVE_URL}/api/health`, { signal: controller.signal })
+      clearTimeout(timeout)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      setConnectionState('connected')
+      setOffline(false)
+      await Promise.all([loadStatus(), loadEvents()])
+    } catch {
+      setApiBase('')
+      setConnectionState('disconnected')
+    }
+  }, [loadStatus, loadEvents])
+
+  // ── Auto-restore from sessionStorage on mount ──
+  const hasAutoRestored = useRef(false)
+  useEffect(() => {
+    if (hasAutoRestored.current) return
+    hasAutoRestored.current = true
+    const saved = getApiBase()
+    if (saved && saved === LIVE_URL) {
+      goLive()
+    }
+  }, [goLive])
 
   // ── Polling: status + events only ──
   useEffect(() => {
@@ -143,6 +179,9 @@ export function AppProvider({ children }) {
       handleTriggerDrift,
       // General
       offline,
+      // Go Live
+      connectionState,
+      goLive,
     }}>
       {children}
     </AppContext.Provider>

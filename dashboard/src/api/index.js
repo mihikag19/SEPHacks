@@ -1,10 +1,27 @@
 /**
  * Latch API Client
  * Centralized fetch wrappers for all backend endpoints.
- * All URLs go through API_BASE — no scattered /api/... strings elsewhere.
+ * All URLs go through apiBase — no scattered /api/... strings elsewhere.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+const SESSION_KEY = 'drift-sentinel-api-base'
+
+let apiBase = sessionStorage.getItem(SESSION_KEY)
+  || import.meta.env.VITE_API_BASE_URL
+  || ''
+
+export function getApiBase() {
+  return apiBase
+}
+
+export function setApiBase(url) {
+  apiBase = url
+  if (url) {
+    sessionStorage.setItem(SESSION_KEY, url)
+  } else {
+    sessionStorage.removeItem(SESSION_KEY)
+  }
+}
 
 /**
  * Internal helper — calls `fetch`, checks `response.ok`, returns parsed JSON.
@@ -13,7 +30,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
  * @returns {Promise<any>}
  */
 async function request(path, opts) {
-  const res = await fetch(`${API_BASE}${path}`, opts)
+  const res = await fetch(`${apiBase}${path}`, opts)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }
@@ -22,19 +39,7 @@ async function request(path, opts) {
 
 /**
  * GET /api/status
- * @returns {Promise<{
- *   state: string,
- *   environment: string,
- *   risk_score: number,
- *   counts: { critical: number, suspicious: number, allowed: number },
- *   last_scan: string,
- *   last_updated: string,
- *   total_resources: number,
- *   compliant_resources: number,
- *   drifted_resources: number,
- *   classifications: Array,
- *   resources: Array
- * }>}
+ * @returns {Promise<Object>}
  */
 export async function fetchStatus() {
   return request('/api/status')
@@ -42,28 +47,7 @@ export async function fetchStatus() {
 
 /**
  * GET /api/events
- * @returns {Promise<Array<{
- *   id: string,
- *   timestamp: string,
- *   resource_id: string,
- *   resource_type: string,
- *   attribute_path: string,
- *   baseline_value: any,
- *   current_value: any,
- *   tier: "critical"|"suspicious"|"allowed",
- *   reasoning: string,
- *   gxp_impact: string,
- *   regulation_reference: string,
- *   remediation_suggestion: string,
- *   remediation_code: string,
- *   pr: { pr_url: string|null, pr_real: boolean }|null,
- *   status: "open"|"resolved",
- *   resource_name: string,
- *   severity: string,
- *   reason: string,
- *   cfr_reference: string,
- *   pr_link: string|null
- * }>>}
+ * @returns {Promise<Array>}
  */
 export async function fetchEvents() {
   return request('/api/events')
@@ -72,7 +56,7 @@ export async function fetchEvents() {
 /**
  * GET /api/events/:id
  * @param {string} id
- * @returns {Promise<Object>} Single drift event in the same shape as fetchEvents items.
+ * @returns {Promise<Object>}
  */
 export async function fetchEventById(id) {
   return request(`/api/events/${encodeURIComponent(id)}`)
@@ -80,20 +64,7 @@ export async function fetchEventById(id) {
 
 /**
  * GET /api/audit-trail
- * @returns {Promise<{
- *   entries: Array<{
- *     id: string,
- *     resource_id: string,
- *     action_type: string,
- *     event_id: string,
- *     tier: string|null,
- *     regulation_reference: string|null,
- *     pr_url: string|null,
- *     details: string,
- *     timestamp: string
- *   }>,
- *   total: number
- * }>}
+ * @returns {Promise<Object>}
  */
 export async function fetchAuditTrail() {
   return request('/api/audit-trail')
@@ -102,12 +73,7 @@ export async function fetchAuditTrail() {
 /**
  * POST /api/trigger-drift
  * @param {"allowed"|"suspicious"|"critical"} scenario
- * @returns {Promise<{
- *   triggered: string,
- *   deviations_found: number,
- *   state: string,
- *   pr: { pr_url: string, real: boolean }|null
- * }>}
+ * @returns {Promise<Object>}
  */
 export async function triggerDrift(scenario) {
   return request('/api/trigger-drift', {

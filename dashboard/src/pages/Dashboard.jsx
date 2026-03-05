@@ -8,6 +8,7 @@ import {
   CartesianGrid,
 } from 'recharts'
 import Sidebar from '../components/Sidebar'
+import GoLiveButton from '../components/GoLiveButton'
 import useCountUp from '../hooks/useCountUp'
 import { useApp } from '../context/AppContext'
 
@@ -606,7 +607,7 @@ export default function Dashboard() {
             </h1>
             <p style={{ fontSize: 13, fontWeight: 300, color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
               Infrastructure compliance monitoring
-              {offline && <span style={{ color: 'var(--status-warning)', marginLeft: 8 }}>(offline)</span>}
+              <GoLiveButton />
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
